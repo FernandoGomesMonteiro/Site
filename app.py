@@ -7,21 +7,18 @@ app.secret_key = 'secret_key'  # Alterar para algo mais seguro em produção
 bcrypt = Bcrypt(app)  # Inicializar o Bcrypt
 
 # Configurações do banco de dados PostgreSQL
-DATABASE_URL = "postgresql://postgres:root@127.0.0.1:4325/your_database"
-
-
+DATABASE_URL = "postgresql://postgres:cris41ff@localhost:5432/site"
 
 # Conectar ao banco de dados
 def get_db_connection():
     try:
         conn = psycopg2.connect(DATABASE_URL)
-        conn.set_client_encoding('UTF8')  # Garantir que a conexão usa UTF-8
-        print("Conexão com o banco de dados bem-sucedida!")  # Mensagem para verificar
+        conn.set_client_encoding('UTF8')
+        print("Conexão com o banco de dados bem-sucedida!")
         return conn
     except Exception as e:
-        print(f"Erro de conexão com o banco de dados: {e}")  # Mensagem de erro
+        print(f"Erro de conexão com o banco de dados: {e}")
         return None
-
 
 # Rota para a tela principal
 @app.route('/')
@@ -37,25 +34,25 @@ def login():
 
         conn = get_db_connection()
         cursor = conn.cursor()
-        
+
         # Consultar o banco de dados para verificar o email
         cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
         user = cursor.fetchone()
-        
+
         cursor.close()
         conn.close()
 
         if user:
             # Verificar a senha com bcrypt
-            stored_password = user[2]  # Supondo que a senha esteja na terceira coluna
+            stored_password = user[3]  # Supondo que a senha esteja na terceira coluna
             if bcrypt.check_password_hash(stored_password, password):
-                return redirect(url_for('dashboard'))
+                return redirect(url_for('dashboard'))  # Redireciona para o dashboard se a senha for correta
             else:
                 flash('E-mail ou senha incorretos', 'danger')
         else:
             flash('E-mail ou senha incorretos', 'danger')
 
-        return redirect(url_for('login'))
+        return redirect(url_for('login'))  # Redireciona de volta para a tela de login caso falhe
 
     return render_template('login.html')
 
