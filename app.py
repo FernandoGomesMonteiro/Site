@@ -7,7 +7,7 @@ app.secret_key = 'secret_key'  # Alterar para algo mais seguro em produção
 bcrypt = Bcrypt(app)  # Inicializar o Bcrypt
 
 # Configurações do banco de dados PostgreSQL
-DATABASE_URL = "postgresql://postgres:cris41ff@localhost:5432/site"
+DATABASE_URL = "postgresql://postgres:cris41ff@localhost:5432/postgres"
 
 # Conectar ao banco de dados
 def get_db_connection():

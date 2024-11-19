@@ -1,2 +1,4 @@
 Flask==2.3.2
 psycopg2==2.9.5
+flask_bcrypt == 3.0.2
+bcrypt == 3.0.2
